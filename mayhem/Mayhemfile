@@ -1,0 +1,11 @@
+project: savantenvs/verona
+target: verona-parser
+
+# In-process libFuzzer harness over verona::parser().parse() — replaces the old
+# uninstrumented `/verona-parser @@` file-CLI (0 edges) with the same code path, instrumented.
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/verona-parser/testsuite
+cmds:
+  - cmd: /mayhem/verona-parser
+    libfuzzer: true

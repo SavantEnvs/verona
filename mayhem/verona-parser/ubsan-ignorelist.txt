@@ -1,0 +1,12 @@
+# UBSan instrumentation ignore-list for the verona-parser fuzz harness.
+#
+# We keep ASan+UBSan fully halting on Verona, trieste and the fuzzed
+# dependencies, but do NOT instrument the C++ standard library's own internal
+# template machinery. libstdc++'s _Rb_tree/_Rb_tree_iterator implementation
+# reports a benign "member call on null pointer" during the well-formedness
+# DSL's static initialisation (std::map::insert over an empty iterator range,
+# libstdc++ bits/stl_tree.h). That UB is inside the standard library, fires
+# before any fuzz input is read, and is not a Verona defect — instrumenting the
+# stdlib internals would abort every run at static-init and yield zero edges.
+[undefined]
+src:*/include/c++/*
